@@ -19,8 +19,7 @@
     function playRound(playerSelection, computerSelection) {
       let plSelect = playerSelection.toLowerCase();
       let compSelect = computerSelection.toLowerCase();
-      console.log(plSelect);
-      console.log(compSelect)
+      console.log(` Your choise - ${plSelect}. Computer's choise - ${compSelect}.`);
       switch(true) {
         case plSelect == "rock" : 
             switch(true) {
@@ -45,20 +44,20 @@
     }
 
     function game() {
-      let player = 0;
-      let comp = 0;
+      let playerScore = 0;
+      let compScore = 0;
       for (let i = 1; i < 6; i++) {
         switch (playRound(prompt("Choose rock, paper or scissors",""), computerPlay())) {
-          case 1 : player++; break;
-          case -1 : comp++; break;
+          case 1 : playerScore++; break;
+          case -1 : compScore++; break;
         }
       };
-      if (player < comp) {
-        console.log(`Sorry, mate, but computer wons! You - ${player} : ${comp} - Computer`);
-      } else if (player > comp) {
-        console.log(`Yay, dude, You won! You - ${player} : ${comp} - Computer`);
+      if (playerScore < compScore) {
+        console.log(`Sorry, mate, but computer wons! You - ${player} : ${compScore} - Computer`);
+      } else if (playerScore > compScore) {
+        console.log(`Yay, dude, You won! You - ${playerScore} : ${compScore} - Computer`);
       } else {
-        console.log(`It's a draw! You both have ${player} - wins.`)
+        console.log(`It's a draw! You both have ${playerScore} - wins.`)
       };
     }
 
