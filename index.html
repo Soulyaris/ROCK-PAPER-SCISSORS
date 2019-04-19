@@ -5,62 +5,86 @@
   <title>ROCK PAPER SCISSORS</title>
 </head>
 <body>
-  <script>
-
-    function computerPlay() {
-      let number = Math.random().toFixed(2);
-      switch(true) {
-        case number <= 0.33 : return "rock"; break;
-        case number <= 0.66 : return "paper"; break;
-        case number >0.66 : return "scissors"; break;
-      }
-    }
-
-    function playRound(playerSelection, computerSelection) {
-      let plSelect = playerSelection.toLowerCase();
-      let compSelect = computerSelection.toLowerCase();
-      console.log(` Your choise - ${plSelect}. Computer's choise - ${compSelect}.`);
-      switch(true) {
-        case plSelect == "rock" : 
-            switch(true) {
-              case compSelect == "rock" : console.log("Draw! Two rocks!"); return(0); break;
-              case compSelect == "paper" : console.log("You loose! Paper beats rock!"); return(-1); break;
-              case compSelect == "scissors" : console.log("You win! Rock beats scissors!"); return(1); break;
-            };
-        case plSelect == "paper" :
-            switch(true) {
-              case compSelect == "rock" : console.log("You win! Paper beats rock!"); return(1); break;
-              case compSelect == "paper" : console.log("Draw! Two papers"); return(0); break;
-              case compSelect == "scissors" : console.log("You loose! scissors beats paper!"); return(-1); break;
-            };
-        case plSelect == "scissors" :
-            switch(true) {
-              case compSelect == "rock" : console.log("You lose! Rock beats scissors!"); return(-1); break;
-              case compSelect == "paper" : console.log("You win! Scissors beats paper!"); return(1); break;
-              case compSelect == "scissors" : console.log("Draw! Two scissors!"); return(0); break;
-            };
-        default : console.log("You choosed nothin' or misspelled! Computer wins!"); return(-1);
-      }
-    }
-
-    function game() {
-      let playerScore = 0;
-      let compScore = 0;
-      for (let i = 1; i < 6; i++) {
-        switch (playRound(prompt("Choose rock, paper or scissors",""), computerPlay())) {
-          case 1 : playerScore++; break;
-          case -1 : compScore++; break;
-        }
-      };
-      if (playerScore < compScore) {
-        console.log(`Sorry, mate, but computer wons! You - ${playerScore} : ${compScore} - Computer`);
-      } else if (playerScore > compScore) {
-        console.log(`Yay, dude, You won! You - ${playerScore} : ${compScore} - Computer`);
-      } else {
-        console.log(`It's a draw! You both have ${playerScore} - wins.`)
-      };
-    }
-
-  </script>
+  <button id="rock">Rock</button>
+  <button id="paper">Paper</button>
+  <button id="scissors">Scissors</button>
+  <div id="gameLog"></div>
 </body>
+<script>
+
+const logContainer = document.querySelector('#gameLog');
+const buttons = document.querySelectorAll('button');
+let restart = false;
+let playerScore = 0;
+let compScore = 0;
+buttons.forEach((button) => {
+  button.addEventListener('click', (e) => {
+    if (restart) {logContainer.innerHTML='';
+      playerScore = 0;
+      compScore = 0;
+      restart = false;
+    }
+    playRound(button.id, computerPlay());
+  });
+});
+
+function roundLog(text){
+  const content = document.createElement('p');
+  content.classList.add('roundLog');
+  content.textContent = text;
+  
+  logContainer.appendChild(content);
+}
+
+function computerPlay() {
+  let number = Math.random().toFixed(2);
+    switch(true) {
+    case number <= 0.33 : return "rock"; break;
+    case number <= 0.66 : return "paper"; break;
+    case number >0.66 : return "scissors"; break;
+  }
+}
+
+function gameState(playerScore, compScore){
+  roundLog(`You - ${playerScore} : ${compScore} - Computer`);
+  if (compScore === 5 || playerScore === 5){
+    if (playerScore < compScore) {
+      roundLog(`Sorry, mate, but computer wons!`);
+    } else if (playerScore > compScore) {
+      roundLog(`Yay, dude, You won!`);
+    } else {
+      roundLog(`It's a draw!`)
+    };
+    restart = true;
+  };
+}
+
+function playRound(playerSelection, computerSelection) {
+  let plSelect = playerSelection.toLowerCase();
+  let compSelect = computerSelection.toLowerCase();
+  roundLog(` Your choise - ${plSelect}. Computer's choise - ${compSelect}.`);
+  switch(true) {
+    case plSelect == "rock" : 
+      switch(true) {
+        case compSelect == "rock" : roundLog("Draw! Two rocks!"); break;
+        case compSelect == "paper" : roundLog("You loose! Paper beats rock!"); compScore++; break;
+        case compSelect == "scissors" : roundLog("You win! Rock beats scissors!"); playerScore++; break;
+      }; break;
+    case plSelect == "paper" :
+      switch(true) {
+        case compSelect == "rock" : roundLog("You win! Paper beats rock!"); playerScore++; break;
+        case compSelect == "paper" : roundLog("Draw! Two papers"); break;
+        case compSelect == "scissors" : roundLog("You loose! scissors beats paper!"); compScore++; break;
+      }; break;
+    case plSelect == "scissors" :
+      switch(true) {
+        case compSelect == "rock" : roundLog("You lose! Rock beats scissors!"); compScore++; break;
+        case compSelect == "paper" : roundLog("You win! Scissors beats paper!"); playerScore++; break;
+        case compSelect == "scissors" : roundLog("Draw! Two scissors!"); break;
+      };
+  }
+  gameState(playerScore, compScore);
+};
+
+</script>
 </html>
